@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br" data-ng-app="app">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.7/angular.min.js"></script>
+  <script src="config/angular-locale_pt-br.js"></script>
+  <title>Aula Angular</title>
+</head>
+
+<body>
+  <div data-ng-controller="ContactController as Contact">
+    <h1>{{ Contact.titulo }}</h1>
+    <table style="border: 1px solid">
+      <thead>
+        <th ng-repeat="(chave, valor) in Contact.contatos[0]">{{ chave }}</th>
+      </thead>
+      <tbody>
+        <tr ng-repeat="contato in Contact.contatos | orderBy:'nome'">
+          <td style="border: 1px solid" ng-repeat="dado in contato">
+            {{ dado }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    angular.module("app", [])
+      .controller("ContactController", ContactController)
+      .filter("phone", () => {
+        return (text) => {
+          if (text) {
+            let ddd = "";
+            let part1 = "";
+            let part2 = "";
+            for (let i = 0; i < text.length; i++) {
+              if (i <= 1) {
+                ddd += text[i];
+              }
+              if (i >= 2 && i <= 6) {
+                part1 += text[i];
+              }
+              if (i > 6) {
+                part2 += text[i];
+              }
+            }
+            return `(${ddd}) ${part1}-${part2}`;
+          }
+        }
+      });
+
+    function ContactController() {
+      let vm = this;
+      vm.titulo = "Cadastro de contato";
+      vm.contatos =
+        [
+          {
+            nome: "Zulu",
+            telefone: "21990385650"
+          },
+          {
+            nome: "Gabriel",
+            telefone: "21990385650"
+          },
+          {
+            nome: "Diego",
+            telefone: "21935412588"
+          },
+          {
+            nome: "Walsh",
+            telefone: "21938565247 "
+          }
+        ];
+    }
+    
+  </script>
+</body>
+
+</html>
+
+<!-- EXEMPLO DE FILTRO CUSTOMIZÁVEL
+    angular.module("app", [])
+        .filter("phone", () => {
+            return (text) => {
+                if (text) {
+                    let ddd = "";
+                    let part1 = "";
+                    let part2 = "-";
+                    for (let i = 0; i < text.length; i++) {
+                        if (i <= 1) {
+                            ddd += text[i];
+                        }
+                        if (i >= 2 && i <= 6) {
+                            part1 += text[i];
+                        }
+                        if (i > 6) {
+                            part2 += text[i];
+                        }
+                    }
+                    return `(${ddd}) ${part1}-${part2}`;
+                }
+            }
+        });
+-->
